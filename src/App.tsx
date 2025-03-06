@@ -1,5 +1,11 @@
+import Survey from "./containers/Survey";
+
 function App() {
-  return <h1 className="text-3xl font-bold text-blue-500">Hello, Tailwind!</h1>;
+  return (
+    <div className="flex min-h-screen items-center justify-center bg-gray-100 p-6">
+      <Survey />
+    </div>
+  );
 }
 
 export default App;
