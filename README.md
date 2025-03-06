@@ -7,6 +7,39 @@ Currently, two official plugins are available:
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
 - [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
 
+
+# Tailwind CSS Setup
+
+## Installation
+
+### Install Tailwind CSS
+
+```sh
+yarn add -D tailwindcss @tailwindcss/vite
+```
+
+### Configure Tailwind CSS
+
+Modify `vite.config.js`:
+
+```js
+import tailwindcss from '@tailwindcss/vite'
+
+export default defineConfig({
+  plugins: [tailwindcss()],
+})
+```
+
+### Import Tailwind CSS
+
+Add the following to `src/index.css`:
+
+```css
+@import 'tailwindcss';
+```
+
+
+
 ## Expanding the ESLint configuration
 
 If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
@@ -52,3 +85,4 @@ export default tseslint.config({
   },
 })
 ```
+
