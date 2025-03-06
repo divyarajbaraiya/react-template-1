@@ -21,11 +21,11 @@ yarn add -D tailwindcss @tailwindcss/vite
 Modify `vite.config.js`:
 
 ```js
-import tailwindcss from '@tailwindcss/vite'
+import tailwindcss from '@tailwindcss/vite';
 
 export default defineConfig({
   plugins: [tailwindcss()],
-})
+});
 ```
 
 ### Import Tailwind CSS
@@ -35,8 +35,6 @@ Add the following to `src/index.css`:
 ```css
 @import 'tailwindcss';
 ```
-
-
 
 ## Expanding the ESLint configuration
 
@@ -59,15 +57,15 @@ export default tseslint.config({
       tsconfigRootDir: import.meta.dirname,
     },
   },
-})
+});
 ```
 
 You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
 
 ```js
 // eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+import reactX from 'eslint-plugin-react-x';
+import reactDom from 'eslint-plugin-react-dom';
 
 export default tseslint.config({
   plugins: {
@@ -81,6 +79,58 @@ export default tseslint.config({
     ...reactX.configs['recommended-typescript'].rules,
     ...reactDom.configs.recommended.rules,
   },
-})
+});
 ```
 
+## ESLint and Prettier Setup
+
+### Install ESLint, Prettier, and Vite Plugin
+
+```sh
+yarn add -D eslint prettier vite-plugin-eslint //other needed all deps
+```
+
+### Configure Vite to Use `vite-plugin-eslint`
+
+Modify `vite.config.ts` to include the plugin:
+
+```ts
+import eslint from 'vite-plugin-eslint';
+
+export default defineConfig({
+  plugins: [eslint()],
+});
+```
+
+### Add Scripts for Linting and Formatting
+
+Modify `package.json`:
+
+```json
+"scripts": {
+  "lint": "eslint . --ext .ts,.tsx --fix",
+  "format": "prettier --write .",
+}
+```
+
+## Running the Project
+
+Start the development server:
+
+```sh
+yarn dev
+```
+
+Run the build process:
+
+```sh
+yarn build
+yarn preview
+```
+
+Lint and format the code:
+
+```sh
+yarn lint
+yarn format
+```
