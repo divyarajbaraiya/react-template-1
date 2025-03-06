@@ -90,7 +90,7 @@ export default tseslint.config({
 yarn add -D eslint prettier vite-plugin-eslint //other needed all deps
 ```
 
-### Configure Vite to Use `vite-plugin-eslint`
+### Configure Vite to Use `vite-plugin-eslint` (optional)
 
 Modify `vite.config.ts` to include the plugin:
 
