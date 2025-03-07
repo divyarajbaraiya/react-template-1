@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from "react";
-import { Control, FieldValues, Path, useController } from "react-hook-form";
+import { useState, useRef, useEffect } from 'react';
+import { Control, FieldValues, Path, useController } from 'react-hook-form';
 
 type Option = {
   label: string;
@@ -17,7 +17,7 @@ interface SelectProps<T extends FieldValues> {
 const Select = <T extends FieldValues>({
   options,
   multiple = false,
-  placeholder = "Select...",
+  placeholder = 'Select...',
   control,
   name,
 }: SelectProps<T>) => {
@@ -39,8 +39,8 @@ const Select = <T extends FieldValues>({
         setIsOpen(false);
       }
     };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
   const toggleDropdown = () => {
@@ -62,7 +62,7 @@ const Select = <T extends FieldValues>({
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
     if (!isOpen) {
-      if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+      if (event.key === 'ArrowDown' || event.key === 'Enter' || event.key === ' ') {
         setIsOpen(true);
         setHighlightedIndex(0);
         event.preventDefault();
@@ -72,15 +72,21 @@ const Select = <T extends FieldValues>({
 
     let newIndex = highlightedIndex;
 
-    if (event.key === "ArrowDown") {
-      newIndex = highlightedIndex === null || highlightedIndex >= options.length - 1 ? 0 : highlightedIndex + 1;
-    } else if (event.key === "ArrowUp") {
-      newIndex = highlightedIndex === null || highlightedIndex <= 0 ? options.length - 1 : highlightedIndex - 1;
-    } else if (event.key === "Enter" || event.key === " ") {
+    if (event.key === 'ArrowDown') {
+      newIndex =
+        highlightedIndex === null || highlightedIndex >= options.length - 1
+          ? 0
+          : highlightedIndex + 1;
+    } else if (event.key === 'ArrowUp') {
+      newIndex =
+        highlightedIndex === null || highlightedIndex <= 0
+          ? options.length - 1
+          : highlightedIndex - 1;
+    } else if (event.key === 'Enter' || event.key === ' ') {
       if (highlightedIndex !== null) {
         handleSelect(options[highlightedIndex].value);
       }
-    } else if (event.key === "Escape") {
+    } else if (event.key === 'Escape') {
       setIsOpen(false);
     }
 
@@ -89,7 +95,7 @@ const Select = <T extends FieldValues>({
     if (listRef.current && newIndex !== null) {
       const item = listRef.current.children[newIndex] as HTMLLIElement;
       if (item) {
-        item.scrollIntoView({ block: "nearest" });
+        item.scrollIntoView({ block: 'nearest' });
       }
     }
   };
@@ -111,7 +117,7 @@ const Select = <T extends FieldValues>({
       >
         <span>
           {multiple
-            ? value?.map((val: string) => options.find((o) => o.value === val)?.label).join(", ") ||
+            ? value?.map((val: string) => options.find((o) => o.value === val)?.label).join(', ') ||
               placeholder
             : options.find((o) => o.value === value)?.label || placeholder}
         </span>
@@ -131,8 +137,8 @@ const Select = <T extends FieldValues>({
               role="option"
               aria-selected={value?.includes(option.value)}
               className={`flex cursor-pointer items-center gap-2 px-4 py-2 ${
-                multiple && value?.includes(option.value) ? "bg-blue-200" : ""
-              } ${highlightedIndex === index ? "bg-blue-300" : ""}`}
+                multiple && value?.includes(option.value) ? 'bg-blue-200' : ''
+              } ${highlightedIndex === index ? 'bg-blue-300' : ''}`}
               onClick={() => handleSelect(option.value)}
             >
               {multiple && (

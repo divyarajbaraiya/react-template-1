@@ -1,4 +1,4 @@
-import { render } from '@testing-library/react';
+import { render, fireEvent } from '@testing-library/react';
 import Button from './Button';
 
 describe('Button Component', () => {
@@ -9,9 +9,9 @@ describe('Button Component', () => {
   });
 
   test('handles click event', () => {
-    const handleClick = jest.fn();
+    const handleClick = vi.fn();
 
-    const { getByTestId, fireEvent } = render(<Button onClick={handleClick}>Click Me</Button>);
+    const { getByTestId } = render(<Button onClick={handleClick}>Click Me</Button>);
     const button = getByTestId('button');
 
     fireEvent.click(button);
@@ -40,13 +40,13 @@ describe('Button Component', () => {
   });
 
   test('applies correct size classes', () => {
-    const { rerender } = render(<Button size="sm">Small</Button>);
-    expect(screen.getByTestId('button')).toHaveClass('px-3 py-1');
+    const { rerender, getByTestId } = render(<Button size="sm">Small</Button>);
+    expect(getByTestId('button')).toHaveClass('px-3 py-1');
 
     rerender(<Button size="md">Medium</Button>);
-    expect(screen.getByTestId('button')).toHaveClass('px-4 py-2');
+    expect(getByTestId('button')).toHaveClass('px-4 py-2');
 
     rerender(<Button size="lg">Large</Button>);
-    expect(screen.getByTestId('button')).toHaveClass('px-6 py-3');
+    expect(getByTestId('button')).toHaveClass('px-6 py-3');
   });
 });

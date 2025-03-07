@@ -1,5 +1,5 @@
-import { useEffect, useRef } from "react";
-import { useController, Control, FieldValues, Path } from "react-hook-form";
+import { useEffect, useRef } from 'react';
+import { useController, Control, FieldValues, Path } from 'react-hook-form';
 
 interface RadioProps<T extends FieldValues> {
   name: Path<T>;
@@ -26,9 +26,9 @@ const Radio = <T extends FieldValues>({ name, control, options, label }: RadioPr
 
       let newIndex = currentIndex;
 
-      if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      if (event.key === 'ArrowRight' || event.key === 'ArrowDown') {
         newIndex = (currentIndex + 1) % options.length;
-      } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      } else if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
         newIndex = (currentIndex - 1 + options.length) % options.length;
       }
 
@@ -37,8 +37,8 @@ const Radio = <T extends FieldValues>({ name, control, options, label }: RadioPr
       }
     };
 
-    document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
   }, [value, options, onChange]);
 
   useEffect(() => {
@@ -48,7 +48,12 @@ const Radio = <T extends FieldValues>({ name, control, options, label }: RadioPr
   }, [value]);
 
   return (
-    <div role="radiogroup" aria-labelledby={`${name}-label`} ref={groupRef} className="flex flex-wrap space-x-4">
+    <div
+      role="radiogroup"
+      aria-labelledby={`${name}-label`}
+      ref={groupRef}
+      className="flex flex-wrap space-x-4"
+    >
       <p id={`${name}-label`} className="sr-only">
         {label}
       </p>

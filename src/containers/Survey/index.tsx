@@ -21,7 +21,7 @@ const Survey: React.FC = () => {
     formState: { isValid, isSubmitting },
   } = useForm<SurveyData>({
     resolver: zodResolver(surveySchema),
-    mode: "onChange",
+    mode: 'onChange',
     defaultValues: {
       brands: [],
       colors: [],
@@ -122,7 +122,7 @@ const Survey: React.FC = () => {
         }`}
       >
         {renderLabel('Transmission Type', 'transmission')}
-        <Radio label='transmission' name="transmission" control={control} options={TRANSMISSIONS} />
+        <Radio label="transmission" name="transmission" control={control} options={TRANSMISSIONS} />
       </div>
 
       <div className="md:col-span-2">
