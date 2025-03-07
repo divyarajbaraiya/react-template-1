@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { surveySchema } from './schema';
 import { SurveyData } from './types';
-import Button from '../../components/Button';
+import Button from '../../components/Button/Button';
 import Select from '../../components/Select';
 import Radio from '../../components/Radio';
 
@@ -21,6 +21,7 @@ const Survey: React.FC = () => {
     formState: { isValid, isSubmitting },
   } = useForm<SurveyData>({
     resolver: zodResolver(surveySchema),
+    mode: "onChange",
     defaultValues: {
       brands: [],
       colors: [],
@@ -66,15 +67,16 @@ const Survey: React.FC = () => {
     }
   }, [selectedBrands, selectedColors, setValue]);
 
-  const onSubmit = useCallback(async (data: SurveyData) => {
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setSubmittedData(data);
-  }, []);
-
   const onReset = () => {
     reset();
     setSubmittedData(null);
   };
+
+  const onSubmit = useCallback(async (data: SurveyData) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
+    setSubmittedData(data);
+    reset();
+  }, []);
 
   const renderHeader = () => (
     <h2 className="mb-6 text-center text-2xl font-bold text-gray-800 md:text-3xl">Car Survey</h2>
@@ -120,7 +122,7 @@ const Survey: React.FC = () => {
         }`}
       >
         {renderLabel('Transmission Type', 'transmission')}
-        <Radio name="transmission" control={control} options={TRANSMISSIONS} />
+        <Radio label='transmission' name="transmission" control={control} options={TRANSMISSIONS} />
       </div>
 
       <div className="md:col-span-2">
