@@ -6,10 +6,7 @@ import { SurveyData } from './types';
 import Button from '../../components/Button/Button';
 import Select from '../../components/Select';
 import Radio from '../../components/Radio';
-
-const CAR_BRANDS = ['Chevy', 'Ford', 'Honda', 'Buick', 'Toyota', 'Tesla', 'Kia'];
-const COLORS = ['Blue', 'Silver', 'Black', 'White', 'Red', 'Green', 'Yellow', 'Pink'];
-const TRANSMISSIONS = ['Manual', 'Automatic'];
+import { CAR_BRANDS, COLORS, TRANSMISSIONS } from './constants';
 
 const Survey: React.FC = () => {
   const {
@@ -34,7 +31,6 @@ const Survey: React.FC = () => {
   const selectedBrands = watch('brands') || [];
   const selectedColors = watch('colors') || [];
 
-  // Memoized filtered colors to optimize re-renders
   const filteredColors = useMemo(() => {
     return selectedBrands.includes('Toyota') || selectedBrands.includes('Tesla')
       ? COLORS.filter((c) => !['Pink', 'Green', 'Yellow'].includes(c))
@@ -51,7 +47,6 @@ const Survey: React.FC = () => {
 
   // Handle dynamic filtering of colors and transmission logic
   useEffect(() => {
-    // Remove invalid colors if Toyota or Tesla is selected
     if (selectedBrands.some((brand) => ['Toyota', 'Tesla'].includes(brand))) {
       setValue(
         'colors',
@@ -127,8 +122,8 @@ const Survey: React.FC = () => {
 
       <div className="md:col-span-2">
         <Button
-          className={`w-full rounded-md py-3 text-lg transition ${
-            isValid ? 'bg-blue-600 text-white hover:bg-blue-700' : 'cursor-not-allowed bg-gray-400'
+          className={`w-full ${
+            isValid ? '' : 'cursor-not-allowed bg-gray-400'
           }`}
           type="submit"
           disabled={!isValid}

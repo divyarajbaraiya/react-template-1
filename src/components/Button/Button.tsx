@@ -15,7 +15,7 @@ const Button: React.FC<ButtonProps> = ({
   ...props
 }) => {
   const baseStyles =
-    "flex items-center justify-center rounded-md font-medium transition focus:outline-none focus:ring-2 focus:ring-blue-500 cursor-pointer";
+    "flex items-center justify-center rounded-md font-medium transition focus:outline-none focus:ring-2 focus:ring-blue-500";
 
   const variants = {
     default: "bg-blue-600 text-white hover:bg-blue-700",
@@ -33,7 +33,7 @@ const Button: React.FC<ButtonProps> = ({
     <button
       data-testid="button"
       className={`${baseStyles} ${variants[variant]} ${sizes[size]} ${
-        isLoading ? "cursor-not-allowed opacity-50" : ""
+        isLoading || props.disabled ? "cursor-not-allowed opacity-50" : "cursor-pointer"
       } ${className}`}
       disabled={isLoading}
       {...props}
