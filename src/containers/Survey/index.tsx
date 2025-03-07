@@ -18,7 +18,7 @@ const Survey: React.FC = () => {
     watch,
     setValue,
     reset,
-    formState: { isValid },
+    formState: { isValid, isSubmitting },
   } = useForm<SurveyData>({
     resolver: zodResolver(surveySchema),
     defaultValues: {
@@ -66,7 +66,8 @@ const Survey: React.FC = () => {
     }
   }, [selectedBrands, selectedColors, setValue]);
 
-  const onSubmit = useCallback((data: SurveyData) => {
+  const onSubmit = useCallback(async (data: SurveyData) => {
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     setSubmittedData(data);
   }, []);
 
@@ -129,6 +130,7 @@ const Survey: React.FC = () => {
           }`}
           type="submit"
           disabled={!isValid}
+          isLoading={isSubmitting}
         >
           Submit
         </Button>
@@ -151,11 +153,7 @@ const Survey: React.FC = () => {
             <strong>Transmission:</strong> {submittedData.transmission}
           </p>
         )}
-        <Button
-          className="rounded-md bg-gray-400 py-3 text-lg text-white transition hover:bg-gray-600"
-          type="button"
-          onClick={onReset}
-        >
+        <Button className="mt-2" type="button" onClick={onReset} variant="destructive">
           Reset
         </Button>
       </div>
