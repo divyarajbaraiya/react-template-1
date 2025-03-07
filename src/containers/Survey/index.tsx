@@ -5,6 +5,7 @@ import { surveySchema } from './schema';
 import { SurveyData } from './types';
 import Button from '../../components/Button';
 import Select from '../../components/Select';
+import Radio from '../../components/Radio';
 
 const CAR_BRANDS = ['Chevy', 'Ford', 'Honda', 'Buick', 'Toyota', 'Tesla', 'Kia'];
 const COLORS = ['Blue', 'Silver', 'Black', 'White', 'Red', 'Green', 'Yellow', 'Pink'];
@@ -13,7 +14,6 @@ const TRANSMISSIONS = ['Manual', 'Automatic'];
 const Survey: React.FC = () => {
   const {
     control,
-    register,
     handleSubmit,
     watch,
     setValue,
@@ -21,7 +21,6 @@ const Survey: React.FC = () => {
     formState: { isValid },
   } = useForm<SurveyData>({
     resolver: zodResolver(surveySchema),
-    mode: 'onChange',
     defaultValues: {
       brands: [],
       colors: [],
@@ -30,6 +29,7 @@ const Survey: React.FC = () => {
   });
 
   const [submittedData, setSubmittedData] = useState<SurveyData | null>(null);
+
   const selectedBrands = watch('brands') || [];
   const selectedColors = watch('colors') || [];
 
@@ -79,10 +79,16 @@ const Survey: React.FC = () => {
     <h2 className="mb-6 text-center text-2xl font-bold text-gray-800 md:text-3xl">Car Survey</h2>
   );
 
+  const renderLabel = (text: string, htmlFor?: string) => (
+    <label htmlFor={htmlFor} className="block font-medium text-gray-700">
+      {text}
+    </label>
+  );
+
   const renderForm = () => (
     <form onSubmit={handleSubmit(onSubmit)} className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <div className="flex flex-col gap-2">
-        <label className="block font-medium text-gray-700">Select Car Brands</label>
+        {renderLabel('Select Car Brands', 'brands')}
         <Select
           name="brands"
           control={control}
@@ -95,7 +101,7 @@ const Survey: React.FC = () => {
       </div>
 
       <div className="flex flex-col gap-2">
-        <label className="block font-medium text-gray-700">Select Colors</label>
+        {renderLabel('Select Colors', 'colors')}
         <Select
           name="colors"
           control={control}
@@ -107,19 +113,14 @@ const Survey: React.FC = () => {
         />
       </div>
 
-      {hideTransmission && (
-        <div className="md:col-span-2">
-          <label className="block font-medium text-gray-700">Transmission Type</label>
-          <div className="flex space-x-4">
-            {TRANSMISSIONS.map((option) => (
-              <label key={option} className="flex items-center space-x-2">
-                <input type="radio" value={option} {...register('transmission')} />
-                <span>{option}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-      )}
+      <div
+        className={`transition-all duration-500 ease-in-out md:col-span-2 ${
+          hideTransmission ? 'max-h-[200px] opacity-100' : 'max-h-0 overflow-hidden opacity-0'
+        }`}
+      >
+        {renderLabel('Transmission Type', 'transmission')}
+        <Radio name="transmission" control={control} options={TRANSMISSIONS} />
+      </div>
 
       <div className="md:col-span-2">
         <Button

@@ -1,6 +1,5 @@
 export interface SurveyData {
-    brands: string[];
-    colors: string[];
-    transmission?: "Manual" | "Automatic";
-  }
-  
+  brands: string[];
+  colors: string[];
+  transmission?: 'Manual' | 'Automatic';
+}

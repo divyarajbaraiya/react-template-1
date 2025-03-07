@@ -6,15 +6,15 @@ type Option = {
   value: string;
 };
 
-type SelectProps<T extends FieldValues> = {
-    name: Path<T>;
-    control: Control<T>;
-    options: Option[];
-    multiple?: boolean;
-    placeholder?: string;
-  };
-  
-  const Select = <T extends FieldValues>({
+interface SelectProps<T extends FieldValues> {
+  name: Path<T>;
+  control: Control<T>;
+  options: Option[];
+  multiple?: boolean;
+  placeholder?: string;
+}
+
+const Select = <T extends FieldValues>({
   options,
   multiple = false,
   placeholder = 'Select...',
@@ -75,7 +75,7 @@ type SelectProps<T extends FieldValues> = {
           {options.map((option) => (
             <li
               key={option.value}
-              className={`flex cursor-pointer items-center px-4 py-2 gap-2 ${
+              className={`flex cursor-pointer items-center gap-2 px-4 py-2 ${
                 multiple && value?.includes(option.value) ? 'bg-blue-200' : ''
               }`}
               onClick={() => handleSelect(option.value)}
