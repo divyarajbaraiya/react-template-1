@@ -33,7 +33,6 @@ const Select = <T extends FieldValues>({
   const buttonRef = useRef<HTMLButtonElement>(null);
   const listRef = useRef<HTMLUListElement>(null);
 
-  // Close dropdown when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
@@ -87,7 +86,6 @@ const Select = <T extends FieldValues>({
 
     setHighlightedIndex(newIndex);
 
-    // Auto-scroll selected option into view
     if (listRef.current && newIndex !== null) {
       const item = listRef.current.children[newIndex] as HTMLLIElement;
       if (item) {
@@ -98,11 +96,17 @@ const Select = <T extends FieldValues>({
 
   return (
     <div className="relative w-full" ref={dropdownRef}>
+      <label id="select-label" className="sr-only">
+        Choose an option
+      </label>
       <button
         ref={buttonRef}
         type="button"
         onClick={toggleDropdown}
         onKeyDown={handleKeyDown}
+        aria-haspopup="listbox"
+        aria-expanded={isOpen}
+        aria-labelledby="select-label"
         className="flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-left shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
       >
         <span>
@@ -117,11 +121,15 @@ const Select = <T extends FieldValues>({
       {isOpen && (
         <ul
           ref={listRef}
+          role="listbox"
+          aria-labelledby="select-label"
           className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md border border-gray-300 bg-white shadow-lg"
         >
           {options.map((option, index) => (
             <li
               key={option.value}
+              role="option"
+              aria-selected={value?.includes(option.value)}
               className={`flex cursor-pointer items-center gap-2 px-4 py-2 ${
                 multiple && value?.includes(option.value) ? "bg-blue-200" : ""
               } ${highlightedIndex === index ? "bg-blue-300" : ""}`}
