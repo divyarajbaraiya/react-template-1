@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { Control, FieldValues, Path, useController } from 'react-hook-form';
+import { useState, useRef, useEffect } from "react";
+import { Control, FieldValues, Path, useController } from "react-hook-form";
 
 type Option = {
   label: string;
@@ -17,7 +17,7 @@ interface SelectProps<T extends FieldValues> {
 const Select = <T extends FieldValues>({
   options,
   multiple = false,
-  placeholder = 'Select...',
+  placeholder = "Select...",
   control,
   name,
 }: SelectProps<T>) => {
@@ -27,7 +27,11 @@ const Select = <T extends FieldValues>({
   } = useController({ name, control });
 
   const [isOpen, setIsOpen] = useState(false);
+  const [highlightedIndex, setHighlightedIndex] = useState<number | null>(null);
+
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const listRef = useRef<HTMLUListElement>(null);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -36,11 +40,14 @@ const Select = <T extends FieldValues>({
         setIsOpen(false);
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
-  const toggleDropdown = () => setIsOpen(!isOpen);
+  const toggleDropdown = () => {
+    setIsOpen((prev) => !prev);
+    setHighlightedIndex(null);
+  };
 
   const handleSelect = (selectedValue: string) => {
     if (multiple) {
@@ -54,16 +61,53 @@ const Select = <T extends FieldValues>({
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (!isOpen) {
+      if (event.key === "ArrowDown" || event.key === "Enter" || event.key === " ") {
+        setIsOpen(true);
+        setHighlightedIndex(0);
+        event.preventDefault();
+      }
+      return;
+    }
+
+    let newIndex = highlightedIndex;
+
+    if (event.key === "ArrowDown") {
+      newIndex = highlightedIndex === null || highlightedIndex >= options.length - 1 ? 0 : highlightedIndex + 1;
+    } else if (event.key === "ArrowUp") {
+      newIndex = highlightedIndex === null || highlightedIndex <= 0 ? options.length - 1 : highlightedIndex - 1;
+    } else if (event.key === "Enter" || event.key === " ") {
+      if (highlightedIndex !== null) {
+        handleSelect(options[highlightedIndex].value);
+      }
+    } else if (event.key === "Escape") {
+      setIsOpen(false);
+    }
+
+    setHighlightedIndex(newIndex);
+
+    // Auto-scroll selected option into view
+    if (listRef.current && newIndex !== null) {
+      const item = listRef.current.children[newIndex] as HTMLLIElement;
+      if (item) {
+        item.scrollIntoView({ block: "nearest" });
+      }
+    }
+  };
+
   return (
     <div className="relative w-full" ref={dropdownRef}>
       <button
+        ref={buttonRef}
         type="button"
         onClick={toggleDropdown}
+        onKeyDown={handleKeyDown}
         className="flex w-full items-center justify-between rounded-md border border-gray-300 bg-white px-4 py-2 text-left shadow-sm focus:ring-2 focus:ring-blue-500 focus:outline-none"
       >
         <span>
           {multiple
-            ? value?.map((val: string) => options.find((o) => o.value === val)?.label).join(', ') ||
+            ? value?.map((val: string) => options.find((o) => o.value === val)?.label).join(", ") ||
               placeholder
             : options.find((o) => o.value === value)?.label || placeholder}
         </span>
@@ -71,13 +115,16 @@ const Select = <T extends FieldValues>({
       </button>
 
       {isOpen && (
-        <ul className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md border border-gray-300 bg-white shadow-lg">
-          {options.map((option) => (
+        <ul
+          ref={listRef}
+          className="absolute z-10 mt-1 max-h-40 w-full overflow-auto rounded-md border border-gray-300 bg-white shadow-lg"
+        >
+          {options.map((option, index) => (
             <li
               key={option.value}
               className={`flex cursor-pointer items-center gap-2 px-4 py-2 ${
-                multiple && value?.includes(option.value) ? 'bg-blue-200' : ''
-              }`}
+                multiple && value?.includes(option.value) ? "bg-blue-200" : ""
+              } ${highlightedIndex === index ? "bg-blue-300" : ""}`}
               onClick={() => handleSelect(option.value)}
             >
               {multiple && (
